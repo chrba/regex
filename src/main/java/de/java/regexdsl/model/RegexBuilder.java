@@ -8,14 +8,18 @@ import java.util.Random;
 
 import de.java.regexdsl.component.AnyComponent;
 import de.java.regexdsl.component.ConstantComponent;
-import de.java.regexdsl.component.ContainerComponent;
+import de.java.regexdsl.component.RootComponent;
 import de.java.regexdsl.component.GroupComponent;
 import de.java.regexdsl.component.NumberComponent;
 import de.java.regexdsl.component.OptionalComponent;
 import de.java.regexdsl.component.PatternComponent;
 import de.java.regexdsl.component.StringComponent;
 
-//not immutable!
+/**
+ * A builder that defines a DSL to create a {@link Regex}.
+ * 
+ * @author Christian Bannes
+ */
 public class RegexBuilder {
 	final LinkedList<ComplexExpression> list;
 	final List<String> names;
@@ -24,17 +28,20 @@ public class RegexBuilder {
 	private RegexBuilder() {
 		this.list =  new LinkedList<ComplexExpression>();
 		this.names = new ArrayList<String>();;
-		list.add(new ContainerComponent());
+		list.add(new RootComponent());
 	}
 	
-	
-
-	public RegexBuilder(LinkedList<ComplexExpression> list, List<String> names) {
+	private RegexBuilder(LinkedList<ComplexExpression> list, List<String> names) {
 		this.list = list;
 		this.names = names;
 	}
 
 
+	/**
+	 * Creates a new <code>RegexBuilder</code>
+	 * 
+	 * @return the newly created <code>RegexBuilder</code>.
+	 */
 	public static RegexBuilder create() {
 		return new RegexBuilder();
 	}

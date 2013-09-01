@@ -1,7 +1,11 @@
 package de.java.regexdsl.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RegexBuilderTest {
@@ -14,7 +18,7 @@ public class RegexBuilderTest {
 				.build();
 	
 		final Match match = regex.match("12345");
-		Assert.assertEquals(null, match.get("str1"));
+		Assert.assertEquals(null, match.getByName("str1"));
 		
 	}
 	
@@ -26,7 +30,7 @@ public class RegexBuilderTest {
 					.build();
 		
 		final Match match = regex.match("this is a test");
-		Assert.assertEquals("this", match.get("str1"));
+		Assert.assertEquals("this", match.getByName("str1"));
 	}
 	
 	@Test
@@ -37,7 +41,7 @@ public class RegexBuilderTest {
 					.build();
 		
 		final Match match = regex.match("this 1234.5678 is a test");
-		Assert.assertEquals("1234.5678", match.get("num1"));
+		Assert.assertEquals("1234.5678", match.getByName("num1"));
 	}
 	
 	@Test
@@ -54,9 +58,9 @@ public class RegexBuilderTest {
 		
 		final Match match = regex.match("Times: user=0.78 sys=0.14, real=0.06 secs");
 		
-		Assert.assertEquals("0.78", match.get("num1"));
-		Assert.assertEquals("0.14", match.get("num2"));
-		Assert.assertEquals("0.06", match.get("num3"));
+		Assert.assertEquals("0.78", match.getByName("num1"));
+		Assert.assertEquals("0.14", match.getByName("num2"));
+		Assert.assertEquals("0.06", match.getByName("num3"));
 	}
 	
 	@Test
@@ -73,10 +77,10 @@ public class RegexBuilderTest {
 				.end().build();
 		
 		final Match match = regex.match(s);
-		Assert.assertEquals("2170358", match.get("first->from"));
-		Assert.assertEquals("188201", match.get("first->to"));
-		Assert.assertEquals("2170358", match.get("second->from"));
-		Assert.assertEquals("188201", match.get("second->to"));
+		Assert.assertEquals("2170358", match.getByName("first->from"));
+		Assert.assertEquals("188201", match.getByName("first->to"));
+		Assert.assertEquals("2170358", match.getByName("second->from"));
+		Assert.assertEquals("188201", match.getByName("second->to"));
 		
 	}
 	
@@ -94,32 +98,39 @@ public class RegexBuilderTest {
 				.build();
 		
 		final Match match = regex.match(s);
-		Assert.assertEquals("12345", match.get("opt->num1"));
-		Assert.assertEquals("6789", match.get("num2"));
+		Assert.assertEquals("12345", match.getByName("opt->num1"));
+		Assert.assertEquals("6789", match.getByName("num2"));
 		
 		final Match match2 = regex.match(s2);
-		Assert.assertEquals(null, match2.get("opt->num1"));
-		Assert.assertEquals("6789", match2.get("num2"));
+		Assert.assertEquals(null, match2.getByName("opt->num1"));
+		Assert.assertEquals("6789", match2.getByName("num2"));
 	}
 
 	
 	@Test
-	public void miltipleBlocks1() {
+	public void grouping() {
 		final String s = "12:34:56:78";
 		final Regex regex = RegexBuilder.create()
 				.group("#g1")
-					.group("#g2")
-						.number("#num1")
-					.end()
+					.number("#num1")
+					.constant(":")
+					.number("#num2")
+				.end()
+				.constant(":")
+				.group("#g2")
+					.number("#num1")
+					.constant(":")
+					.number("#num2")
 				.end()
 				.build();
 		
 		final Match match = regex.match(s);
-		Assert.assertEquals("12", match.get("g1->g2->num1"));
+		Assert.assertEquals("12:34", match.getByName("g1"));
+		Assert.assertEquals("56:78", match.getByName("g2"));
 	}
 	
 	@Test
-	public void miltipleBlocks2() {
+	public void miltipleBlocks() {
 		final String s = "12:34:56:78";
 		final Regex regex = RegexBuilder.create()
 				.group("#g1")
@@ -138,6 +149,121 @@ public class RegexBuilderTest {
 				.build();
 		
 		final Match match = regex.match(s);
-		Assert.assertEquals("56", match.get("g1->g3->num1"));
+		Assert.assertEquals("56", match.getByName("g1->g3->num1"));
+	}
+	
+	@Test
+	public void anyComponent() {
+		final String s = "this is a test \n kjjd jh cjhad kkjh :10";
+		
+		final Regex regex = RegexBuilder.create()
+				.constant("this is a test").any()
+				.constant(":")
+				.number("#num")
+				.build();
+		
+		final Match match = regex.match(s);
+		Assert.assertEquals("10", match.getByName("num"));
+		
+	}
+	
+	
+	
+	@Test
+	public void complexExpression() {
+		final String s = "2012-11-14T20:41:13.255+0100: 32.211: [GC 32.211: [ParNew\n" +
+		                  "Desired survivor size 268435456 bytes, new threshold 15 (max 15)\n" +
+		                  "- age   1:   93114784 bytes,   93114784 total\n" +
+		                  "- age   2:   70731768 bytes,  163846552 total\n" +
+		                  ": 2170358K->188201K(2621440K), 0.0623980 secs] 2170358K->188201K(8912896K), 0.0625050 secs] [Times: user=0.78 sys=0.14, real=0.06 secs]\n"; 
+		                            
+		
+		
+		final Regex regex = RegexBuilder.create()
+				.group("#date")
+					.number().constant("-").number().constant("-").number()
+				.end()
+				.constant("T")
+				.group("#time")
+					.number().constant(":").number().constant(":").number()
+				.end()
+				.constant("+").number().constant(": ")
+				.number("#startupTime")
+				.pattern(".*")
+				.constant("ParNew\nDesired survivor size ").number("#desiredSurvivor").any()
+				.constant(": ").number("#heap").constant("K->").number("#heap2").constant("K(")
+				.build();
+		
+		final Match match = regex.match(s);
+		
+		System.out.println(match.getTotalMatch());
+		
+		Assert.assertEquals("2012-11-14", match.getByName("date"));
+		Assert.assertEquals("20:41:13.255", match.getByName("time"));
+		Assert.assertEquals("32.211", match.getByName("startupTime"));
+		Assert.assertEquals("2170358", match.getByName("heap"));
+		Assert.assertEquals("188201", match.getByName("heap2"));
+	}
+	
+	@Test
+	public void regex() {
+		final String s = "12:13:14 und 15:16:17";
+		
+		//create a pattern that can be used multiple times
+		final Regex time = RegexBuilder.create()
+				.number("#num1").constant(":").number("#num2").constant(":").number("#num3")
+				.build();
+		
+		//use the pattern
+		final Regex regex = RegexBuilder.create()
+				.regex("#time1", time).constant(" und ").regex("#time2", time)
+				.build();
+		
+		final Match match = regex.match(s);
+		
+		Assert.assertEquals("12:13:14", match.getByName("time1"));
+		Assert.assertEquals("15:16:17", match.getByName("time2"));
+	}
+	
+	@Test
+	public void pattern() {
+		final Regex regex = RegexBuilder.create()
+				.pattern("#number", "^\\d\\.\\d{2}")
+				.build();
+		
+		final Match match1 = regex.match("2.34");
+		final Match match2 = regex.match("22.34"); //should not match
+		
+		Assert.assertEquals("2.34", match1.getByName("number"));
+		Assert.assertEquals(null, match2.getByName("number"));
+	}
+	
+	@Test
+	//@Ignore
+	public void test()
+	{
+//		final String s = "this is a test((?s:.*)):(\\d+(\\.\\d+)?)";
+//		
+//		final Pattern p = Pattern.compile(s);
+//		final Matcher match = p.matcher("this is a test :12345");
+//		
+//		match.find();
+//		
+//		final String group = match.group();
+//		System.out.println("group: " + group);
+//		System.out.println("count" + match.groupCount());
+//		System.out.println("1:" + match.group(1));
+//		System.out.println("2:" + match.group(2));
+		
+		
+		final String s = "blabla (? und so weiter";
+		final String res = s.replaceAll("\\(\\?", "");
+		
+		System.out.println(res);
+		
+		
+		
+		
+		
 	}
 }

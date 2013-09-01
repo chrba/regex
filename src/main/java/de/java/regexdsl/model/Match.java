@@ -13,7 +13,11 @@ public class Match {
 		this.names = names;
 	}
 
-	public String get(final String name) {
+	public String getTotalMatch() {
+		return this.matcher.group();
+	}
+	
+	public String getByName(final String name) {
 		if(!this.names.containsKey(name))
 			throw new IllegalArgumentException("The specified name does not exist: " + name);
 		

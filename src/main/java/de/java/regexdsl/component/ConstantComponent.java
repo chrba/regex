@@ -4,10 +4,17 @@ import de.java.regexdsl.model.SimpleExpression;
 
 public class ConstantComponent extends SimpleExpression {
 
-	private String constant;
+	private final static String[] metaChars = {"?", "$", ".", "+", "^", "(", ")", "[", "]"};
+	private final String constant;
 
 	public ConstantComponent(final String constant) {
-		this.constant = constant;
+		String result = constant.replaceAll("\\\\", "\\\\\\\\");
+		
+		for(final String metaChar : metaChars)
+		{
+			result = result.replaceAll("\\" + metaChar , "\\\\" + metaChar);
+		}
+		this.constant = result;
 	}
 	
 	@Override

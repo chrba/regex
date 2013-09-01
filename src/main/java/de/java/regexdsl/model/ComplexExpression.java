@@ -19,6 +19,7 @@ public abstract class ComplexExpression implements RegexExpression {
 	
 
 	public String getName() {
+		if(this.name == null) return null;
 		return this.name.startsWith("#")?  this.name.substring(1) : this.name;
 	}
 	

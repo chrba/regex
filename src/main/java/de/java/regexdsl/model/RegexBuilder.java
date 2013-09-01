@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import de.java.regexdsl.component.AnyComponent;
 import de.java.regexdsl.component.ConstantComponent;
 import de.java.regexdsl.component.ContainerComponent;
 import de.java.regexdsl.component.GroupComponent;
 import de.java.regexdsl.component.NumberComponent;
 import de.java.regexdsl.component.OptionalComponent;
+import de.java.regexdsl.component.PatternComponent;
 import de.java.regexdsl.component.StringComponent;
 
 //not immutable!
@@ -44,6 +46,11 @@ public class RegexBuilder {
 		return addNamedComponent(new StringComponent(), name);
 	}
 	
+	public RegexBuilder any() {
+		return addComponent(new AnyComponent());
+	}
+	
+	
 	public RegexBuilder group(final String name) {
 		this.list.add(new GroupComponent(name));
 		this.names.add(name);
@@ -53,6 +60,18 @@ public class RegexBuilder {
 	public RegexBuilder number() {
 		return addComponent(new NumberComponent());
 	}
+	
+	public RegexBuilder pattern(final String pattern) {
+		return addComponent(new PatternComponent(pattern));
+	}
+	
+	public RegexBuilder pattern(final String name, final String pattern) {
+		return addNamedComponent(new PatternComponent(pattern), name);
+	}
+	
+	public RegexBuilder regex(final String name, final Regex regex) {
+		return addNamedComponent(regex.getExpression(), name);
+	}	
 	
 	public RegexBuilder number(final String name) {
 		final ComplexExpression expression = this.list.peekLast();
@@ -82,13 +101,13 @@ public class RegexBuilder {
 			throw new IllegalStateException(this.list.size()-1 + " open expressions found!");
 		
 		final ComplexExpression expression = this.list.pollLast();
-		final String regex = expression.asRegex();
+		//final String regex = expression.asRegex();
 		
 		final BreadthFirstTraversal traversal = new BreadthFirstTraversal();
 		final Map<String, Integer> names = traversal.traverse(expression);
 		
 		
-		return new Regex(regex, names);
+		return new Regex(expression, names);
 	}
 	
 

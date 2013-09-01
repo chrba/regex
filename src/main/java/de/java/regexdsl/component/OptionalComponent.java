@@ -1,5 +1,7 @@
 package de.java.regexdsl.component;
 
+
+import static com.google.common.base.Preconditions.checkNotNull;
 import de.java.regexdsl.model.ComplexExpression;
 
 /**
@@ -10,9 +12,13 @@ import de.java.regexdsl.model.ComplexExpression;
  */
 public class OptionalComponent extends ComplexExpression {
 
-	
+	/**
+	 * Creates an optional expression with the given name.
+	 * 
+	 * @param name the name, not null.
+	 */
 	public OptionalComponent(final String name) {
-		super(name);
+		super(checkNotNull(name, "name must not be null"));
 	}
 	
 	@Override

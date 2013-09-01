@@ -9,6 +9,9 @@ import de.java.regexdsl.model.ComplexExpression;
  * @author Christian Bannes
  */
 public class RootComponent extends ComplexExpression{
+	/**
+	 * Creates the root component.
+	 */
 	public RootComponent() {
 		super(null);
 	}

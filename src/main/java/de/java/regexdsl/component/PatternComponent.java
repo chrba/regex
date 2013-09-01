@@ -1,5 +1,7 @@
 package de.java.regexdsl.component;
 
+
+import static com.google.common.base.Preconditions.checkNotNull;
 import de.java.regexdsl.model.SimpleExpression;
 
 /**
@@ -11,9 +13,10 @@ public class PatternComponent extends SimpleExpression{
 	private final String pattern;
 
 	/**
-	 * @param pattern a regex pattern
+	 * @param pattern a regex pattern, not null.
 	 */
 	public PatternComponent(final String pattern) {
+		checkNotNull(pattern, "pattern must not be null");
 		this.pattern = pattern;
 	}
 

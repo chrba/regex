@@ -1,8 +1,5 @@
 package de.java.regexdsl.model;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import junit.framework.Assert;
 
 import org.junit.Ignore;
@@ -196,7 +193,6 @@ public class RegexBuilderTest {
 		
 		final Match match = regex.match(s);
 		
-		System.out.println(match.getTotalMatch());
 		
 		Assert.assertEquals("2012-11-14", match.getByName("date"));
 		Assert.assertEquals("20:41:13.255", match.getByName("time"));
@@ -239,31 +235,11 @@ public class RegexBuilderTest {
 	}
 	
 	@Test
-	//@Ignore
+	@Ignore
 	public void test()
 	{
-//		final String s = "this is a test((?s:.*)):(\\d+(\\.\\d+)?)";
-//		
-//		final Pattern p = Pattern.compile(s);
-//		final Matcher match = p.matcher("this is a test :12345");
-//		
-//		match.find();
-//		
-//		final String group = match.group();
-//		System.out.println("group: " + group);
-//		System.out.println("count" + match.groupCount());
-//		System.out.println("1:" + match.group(1));
-//		System.out.println("2:" + match.group(2));
-		
-		
-		final String s = "blabla (? und so weiter";
+		final String s = "xyz (? and so on";
 		final String res = s.replaceAll("\\(\\?", "");
-		
-		System.out.println(res);
-		
-		
-		
-		
 		
 	}
 }

@@ -17,14 +17,13 @@ public abstract class ComplexExpression implements RegexExpression {
 		this.children.add(childExpression);
 	}
 	
-
+	@Override
 	public String getName() {
 		if(this.name == null) return null;
 		return this.name.startsWith("#")?  this.name.substring(1) : this.name;
 	}
 	
 	
-	//@Override
 	protected String groups() {
 		final StringBuilder builder = new StringBuilder();
 		for(final RegexExpression child : this.children) {
@@ -38,7 +37,7 @@ public abstract class ComplexExpression implements RegexExpression {
 		return Collections.unmodifiableList(this.children);
 	}
 
-	
+	@Override
 	public int ignoreCapturingGroups() {
 		return 0;
 	}

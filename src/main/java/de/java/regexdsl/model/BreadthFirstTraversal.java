@@ -2,6 +2,7 @@ package de.java.regexdsl.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A regular expression with its capturing groups can be seen as a tree. The index of a capturing group
@@ -17,10 +18,11 @@ public class BreadthFirstTraversal {
 	 * Traverses the regex tree in a beadth first manner to find the index
 	 * for each named capturing group.
 	 * 
-	 * @param ex a regex 
-	 * @return a map containing the names and associated index of each named capturing group.
+	 * @param ex a regex, not null.
+	 * @return a map containing the names and associated index of each named capturing group, never null.
 	 */
 	public  Map<String, Integer> traverse(final RegexExpression ex) {
+		checkNotNull(ex, "expression must not be null");
 		index = 0;
 		final Map<String, Integer> map = new HashMap<String, Integer>();
 		
@@ -33,6 +35,13 @@ public class BreadthFirstTraversal {
 	}
 		
 	
+	/**
+	 * Recursively traverses the expression tree.
+	 * 
+	 * @param ex the expression, may contain more child expressions
+	 * @param prefix the name prefix to use
+	 * @return a map which associates names to indexes, never null
+	 */
 	private Map<String, Integer> traverse(final RegexExpression ex, final String prefix) {
 		final Map<String, Integer> map = new HashMap<String, Integer>();
 		
@@ -43,7 +52,6 @@ public class BreadthFirstTraversal {
 		else {
 			this.index += ex.ignoreCapturingGroups();
 		}
-		
 		
 		if (ex.getChildren().size() == 0) return map;
 		

@@ -13,7 +13,7 @@ public class Match {
 		this.names = names;
 	}
 
-	public String getTotalMatch() {
+	public String getTotal() {
 		return this.matcher.group();
 	}
 	
@@ -29,4 +29,5 @@ public class Match {
 			return null;
 		}
 	}
+	
 }

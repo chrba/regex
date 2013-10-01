@@ -20,10 +20,14 @@ public abstract class SimpleExpression implements RegexExpression{
 		final String s1 = this.asRegex().replaceAll("\\(", "");
 		final String s2 = this.asRegex();
 		final String s3 = this.asRegex().replaceAll("\\(\\?", ""); //embedded flag expression don't build up capturing groups!
+		final String s4 = this.asRegex().replaceAll("\\\\\\(", "");  //escaped braces
+		
 		
 		final int groups = s2.length() - s1.length();
 		final int embeddedFlagExp = (s2.length() - s3.length()) / 2;
-		return groups - embeddedFlagExp;//s2.length() - s1.length(); //+ s3.length() / 2;
+		final int escapedBraces = (s2.length() - s4.length()) / 2;
+		
+		return groups - embeddedFlagExp - escapedBraces;//s2.length() - s1.length(); //+ s3.length() / 2;
 	}
 	
 	

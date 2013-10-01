@@ -20,6 +20,47 @@ public class RegexBuilderTest {
 	}
 	
 	@Test
+	public void shouldMatchWholeNumber() {
+		final String s = "abcdefg 12345";
+		final Regex regex = RegexBuilder
+				.create()
+				.any()
+				.pattern("\\b")
+				.number("#num")
+				.build();
+	
+		final Match match = regex.match(s);
+		Assert.assertEquals("12345", match.getByName("num"));
+	}
+	
+	@Test
+	public void constant() {
+		final Regex regex = RegexBuilder
+				.create()
+				.group("#c")
+					.constant("abcde")
+				.end()
+				.build();
+	
+		final Match match = regex.match("abcde");
+		Assert.assertEquals("abcde", match.getByName("c"));
+	}
+	
+	
+	@Test
+	public void constantBraces() {
+		final Regex regex = RegexBuilder
+				.create()
+					.constant("(")
+					.number("#num")
+					.constant(")")
+				.build();
+	
+		final Match match = regex.match("(12345)");
+		Assert.assertEquals("12345", match.getByName("num"));
+	}
+	
+	@Test
 	public void simpleString() {
 		final Regex regex = RegexBuilder
 					.create()

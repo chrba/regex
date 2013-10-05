@@ -47,10 +47,10 @@ public class BreadthFirstTraversal {
 		
 		if(ex.getName() != null) {
 			map.put(prefix + ex.getName(), this.index);
-			this.index += ex.ignoreCapturingGroups() + 1;
+			this.index += ex.numOfCapturingGroups();
 		}
 		else {
-			this.index += ex.ignoreCapturingGroups();
+			this.index += ex.numOfCapturingGroups();
 		}
 		
 		if (ex.getChildren().size() == 0) return map;

@@ -2,7 +2,6 @@ package de.java.regexdsl.model;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RegexBuilderTest {
@@ -275,12 +274,5 @@ public class RegexBuilderTest {
 		Assert.assertEquals(null, match2.getByName("number"));
 	}
 	
-	@Test
-	@Ignore
-	public void test()
-	{
-		final String s = "xyz (? and so on";
-		final String res = s.replaceAll("\\(\\?", "");
-		
-	}
+
 }

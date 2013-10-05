@@ -20,4 +20,9 @@ public class RootComponent extends ComplexExpression{
 	public String asRegex() {
 		return this.groups();
 	}
+	
+	@Override
+	public int numOfCapturingGroups() {
+		return 0;
+	}
 }

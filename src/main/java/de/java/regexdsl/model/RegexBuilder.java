@@ -25,12 +25,21 @@ public class RegexBuilder {
 	final List<String> names;
 	
 	
+	/**
+	 * Starts a new builder
+	 */
 	private RegexBuilder() {
 		this.list =  new LinkedList<ComplexExpression>();
 		this.names = new ArrayList<String>();;
 		list.add(new RootComponent());
 	}
 	
+	/**
+	 * Creates a builder to continue creating the regex
+	 *  
+	 * @param list a list of already created regex expressions
+	 * @param names the names of the regex expressions
+	 */
 	private RegexBuilder(LinkedList<ComplexExpression> list, List<String> names) {
 		this.list = list;
 		this.names = names;
@@ -46,40 +55,96 @@ public class RegexBuilder {
 		return new RegexBuilder();
 	}
 	
+	/**
+	 * Matches any String
+	 * 
+	 * @return the builder
+	 */
 	public RegexBuilder string() {
 		return addComponent(new StringComponent());
 	}
+	
+	/**
+	 * Matches any String, the match can be accessed by the given name 
+	 * @param name the name to access the match
+	 * 
+	 * @return the builder
+	 */
 	public RegexBuilder string(final String name) {
 		return addNamedComponent(new StringComponent(), name);
 	}
 	
+	/**
+	 * Matches any char
+	 * 
+	 * @return the builder
+	 */
 	public RegexBuilder any() {
 		return addComponent(new AnyComponent());
 	}
 	
-	
+	/**
+	 * Starts a group. Any regex that is following will be added to this group until
+	 * {{@link #end()} is called. The match of the group can be accessed by the given name.
+	 * 
+	 * @param name the name to access the match
+	 * @return the builder
+	 */
 	public RegexBuilder group(final String name) {
 		this.list.add(new GroupComponent(name));
 		this.names.add(name);
 		return new RegexBuilder(this.list, this.names);
 	}
 
+	/**
+	 * Matches any number including floats, e.g. 12345 or 0.1234
+	 * 
+	 * @return the builder
+	 */
 	public RegexBuilder number() {
 		return addComponent(new NumberComponent());
 	}
 	
+	/**
+	 * Can be used to pass through any regular expression 
+	 * 
+	 * @param pattern a java regular expression
+	 * @return the builder
+	 */
 	public RegexBuilder pattern(final String pattern) {
 		return addComponent(new PatternComponent(pattern));
 	}
 	
+	/**
+	 * Can be used to pass through any regular expression. The match can be accessed
+	 * with the given name. 
+	 * 
+	 * @param name the name to access the match
+	 * @param pattern a java regular expression
+	 * @return the builder
+	 */
+
 	public RegexBuilder pattern(final String name, final String pattern) {
 		return addNamedComponent(new PatternComponent(pattern), name);
 	}
 	
+	/**
+	 * Used to provide a regex that was created previously using this builder.
+	 * 
+	 * @param name the name to access the regex match
+	 * @param regex the regex
+	 * @return the builder
+	 */
 	public RegexBuilder regex(final String name, final Regex regex) {
 		return addNamedComponent(regex.getExpression(), name);
 	}	
 	
+	/**
+	 * Matches any number including floats, e.g. 12345 or 0.1234. 
+	 * 
+	 * @param name the name to access the match 
+	 * @return the builder
+	 */
 	public RegexBuilder number(final String name) {
 		final ComplexExpression expression = this.list.peekLast();
 		expression.add(new GroupComponent(new NumberComponent(), name));
@@ -89,20 +154,13 @@ public class RegexBuilder {
 		
 		return new RegexBuilder(this.list, this.names);
 	}
+
 	
-	private RegexBuilder addNamedComponent(final RegexExpression ex, final String name) {
-		final ComplexExpression expression = this.list.peekLast();
-		expression.add(new GroupComponent(ex, name));
-		this.names.add(name);
-		return new RegexBuilder(this.list, this.names);
-	}
-	
-	private RegexBuilder addComponent(final RegexExpression ex) {
-		final ComplexExpression expression = this.list.peekLast();
-		expression.add(ex);
-		return new RegexBuilder(this.list, this.names);
-	}
-	
+	/**
+	 * Build the regex
+	 * 
+	 * @return the regex
+	 */
 	public Regex build() {
 		if(this.list.size() != 1) 
 			throw new IllegalStateException(this.list.size()-1 + " open expressions found!");
@@ -118,13 +176,22 @@ public class RegexBuilder {
 	}
 	
 
-
-
+	/**
+	 * Matches the given string
+	 * 
+	 * @param constant some constant string
+	 * @return the builder
+	 */
 	public RegexBuilder constant(String constant) {
 		return addComponent(new ConstantComponent(constant));
 	}
 
 
+	/**
+	 * Must be called to close a complex expression (e.g.{@link #group(String)}.
+	 * 
+	 * @return the builder
+	 */
 	public RegexBuilder end() {
 		if(this.list.size() <= 1)
 			throw new IllegalStateException("Cannot call end(), no opening component found!");
@@ -135,9 +202,30 @@ public class RegexBuilder {
 	}
 
 
+	/**
+	 * Starts an optional regex. Any regex that is following will optional until
+	 * {{@link #end()} is called. The match of the optional regex can be accessed by the given name.
+	 * 
+	 * @param name the name to access the match
+	 * @return the builder
+	 */
 	public RegexBuilder optional(String name) {
 		this.list.add(new OptionalComponent(name));
 		this.names.add(name);
+		return new RegexBuilder(this.list, this.names);
+	}
+	
+	
+	private RegexBuilder addNamedComponent(final RegexExpression ex, final String name) {
+		final ComplexExpression expression = this.list.peekLast();
+		expression.add(new GroupComponent(ex, name));
+		this.names.add(name);
+		return new RegexBuilder(this.list, this.names);
+	}
+	
+	private RegexBuilder addComponent(final RegexExpression ex) {
+		final ComplexExpression expression = this.list.peekLast();
+		expression.add(ex);
 		return new RegexBuilder(this.list, this.names);
 	}
 	

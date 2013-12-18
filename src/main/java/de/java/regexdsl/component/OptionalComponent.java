@@ -20,7 +20,7 @@ public class OptionalComponent extends ComplexExpression {
 	 * 
 	 * @param name the name, not null.
 	 */
-	public OptionalComponent(final String name) {
+	public OptionalComponent(final @Nonnull String name) {
 		super(checkNotNull(name, "name must not be null"));
 	}
 	

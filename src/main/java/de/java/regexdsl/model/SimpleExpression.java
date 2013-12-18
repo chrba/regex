@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A simple expression that does not contain any children. That means that
@@ -21,7 +22,7 @@ public abstract class SimpleExpression implements RegexExpression {
 	 * @return always null
 	 */
 	@Override
-	public String getName() {
+	public @Nullable String getName() {
 		return null;
 	}
 	

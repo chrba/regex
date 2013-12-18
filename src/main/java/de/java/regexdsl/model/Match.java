@@ -3,6 +3,9 @@ package de.java.regexdsl.model;
 import java.util.Map;
 import java.util.regex.Matcher;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Provides access to a regex match. Every match can be accessed by the name
  * of the expression that described the regex. The name is defined
@@ -11,15 +14,15 @@ import java.util.regex.Matcher;
  * @author Christian Bannes
  */
 public class Match {
-	private final Matcher matcher;
-	private final Map<String, Integer> names;
+	private final @Nonnull Matcher matcher;
+	private final @Nonnull Map<String, Integer> names;
 
 	/**
 	 * @param matcher the underlying matcher
 	 * @param names the names of the regexes matched to the indexes of the corresponding
 	 * 		  capturing group
 	 */
-	public Match(Matcher matcher, Map<String, Integer> names) {
+	public Match(final @Nonnull Matcher matcher, final @Nonnull Map<String, Integer> names) {
 		this.matcher = matcher;
 		this.matcher.find();
 		this.names = names;
@@ -30,7 +33,7 @@ public class Match {
 	 * 
 	 * @return the match of the regex
 	 */
-	public String getTotal() {
+	public @Nonnull String getTotal() {
 		return this.matcher.group();
 	}
 	
@@ -39,7 +42,7 @@ public class Match {
 	 * @param name the name of the regex
 	 * @return the match, or null
 	 */
-	public String getByName(final String name) {
+	public @Nullable String getByName(final String name) {
 		if(!this.names.containsKey(name))
 			throw new IllegalArgumentException("The specified name does not exist: " + name);
 		

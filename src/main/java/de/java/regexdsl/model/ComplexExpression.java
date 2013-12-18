@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * An expression which consists of child expressions. 
@@ -18,7 +19,7 @@ public abstract class ComplexExpression implements RegexExpression {
 	/**
 	 * @param name the name of this expression. 
 	 */
-	public ComplexExpression(final String name) {
+	public ComplexExpression(final @Nullable String name) {
 		this.name = name;
 	}
 	
@@ -33,7 +34,7 @@ public abstract class ComplexExpression implements RegexExpression {
 	}
 	
 	@Override
-	public String getName() {
+	public @Nullable String getName() {
 		if(this.name == null) return null;
 		return this.name.startsWith("#")?  this.name.substring(1) : this.name;
 	}
@@ -41,9 +42,9 @@ public abstract class ComplexExpression implements RegexExpression {
 	/**
 	 * Retuns the child expressions as string
 	 * 
-	 * @return the child expressions, never null
+	 * @return the child expressions
 	 */
-	protected String groups() {
+	protected @Nonnull String groups() {
 		final StringBuilder builder = new StringBuilder();
 		for(final RegexExpression child : this.children) {
 			builder.append(child.asRegex());
@@ -52,7 +53,6 @@ public abstract class ComplexExpression implements RegexExpression {
 	}
 
 	@Override
-	@SuppressWarnings("null")
 	public @Nonnull List<RegexExpression> getChildren() {
 		return Collections.unmodifiableList(this.children);
 	}

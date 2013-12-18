@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.component.AnyComponent;
 import de.java.regexdsl.component.ConstantComponent;
 import de.java.regexdsl.component.RootComponent;
@@ -21,8 +23,8 @@ import de.java.regexdsl.component.StringComponent;
  * @author Christian Bannes
  */
 public class RegexBuilder {
-	final LinkedList<ComplexExpression> list;
-	final List<String> names;
+	final @Nonnull LinkedList<ComplexExpression> list;
+	final @Nonnull List<String> names;
 	
 	
 	/**
@@ -40,7 +42,7 @@ public class RegexBuilder {
 	 * @param list a list of already created regex expressions
 	 * @param names the names of the regex expressions
 	 */
-	private RegexBuilder(LinkedList<ComplexExpression> list, List<String> names) {
+	private RegexBuilder(final @Nonnull LinkedList<ComplexExpression> list, final @Nonnull List<String> names) {
 		this.list = list;
 		this.names = names;
 	}
@@ -145,7 +147,7 @@ public class RegexBuilder {
 	 * @param name the name to access the match 
 	 * @return the builder
 	 */
-	public RegexBuilder number(final String name) {
+	public RegexBuilder number(final @Nonnull String name) {
 		final ComplexExpression expression = this.list.peekLast();
 		expression.add(new GroupComponent(new NumberComponent(), name));
 		this.names.add(name);
@@ -182,7 +184,7 @@ public class RegexBuilder {
 	 * @param constant some constant string
 	 * @return the builder
 	 */
-	public RegexBuilder constant(String constant) {
+	public RegexBuilder constant(final @Nonnull String constant) {
 		return addComponent(new ConstantComponent(constant));
 	}
 
@@ -209,21 +211,21 @@ public class RegexBuilder {
 	 * @param name the name to access the match
 	 * @return the builder
 	 */
-	public RegexBuilder optional(String name) {
+	public RegexBuilder optional(final @Nonnull String name) {
 		this.list.add(new OptionalComponent(name));
 		this.names.add(name);
 		return new RegexBuilder(this.list, this.names);
 	}
 	
 	
-	private RegexBuilder addNamedComponent(final RegexExpression ex, final String name) {
+	private RegexBuilder addNamedComponent(final @Nonnull RegexExpression ex, final @Nonnull String name) {
 		final ComplexExpression expression = this.list.peekLast();
 		expression.add(new GroupComponent(ex, name));
 		this.names.add(name);
 		return new RegexBuilder(this.list, this.names);
 	}
 	
-	private RegexBuilder addComponent(final RegexExpression ex) {
+	private RegexBuilder addComponent(final @Nonnull RegexExpression ex) {
 		final ComplexExpression expression = this.list.peekLast();
 		expression.add(ex);
 		return new RegexBuilder(this.list, this.names);

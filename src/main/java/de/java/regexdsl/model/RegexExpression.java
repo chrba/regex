@@ -2,6 +2,10 @@ package de.java.regexdsl.model;
 
 import java.util.List;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Represents a regular expression. A regular expression can be seen as a tree where capturing groups 
  * make up nodes and regexes without any capturing groups (or only with capturing groups we want to ignore) 
@@ -16,7 +20,7 @@ public interface RegexExpression {
 	 * The regular expression as string 
 	 * @return the regex string, never null.
 	 **/
-	public String asRegex();
+	public @Nonnull String asRegex();
 
 	/** 
 	 * The children represent capturing groups of interest of this regex.
@@ -24,7 +28,7 @@ public interface RegexExpression {
 	 * @return the children, never null.  
 	 * 
 	 **/
-	public List<RegexExpression> getChildren();
+	public @Nonnull List<RegexExpression> getChildren();
 	
 	/** 
 	 * The number of capturing groups of this expression, without counting
@@ -32,12 +36,12 @@ public interface RegexExpression {
 	 * 
 	 * @return the number of capturing groups
 	 */
-	public int numOfCapturingGroups();
+	public @Nonnegative int numOfCapturingGroups();
 	
 	/**
 	 * The name used to access the capturing group of this expression.
 	 * 
 	 * @return the name, may be null
 	 */
-	public String getName();
+	public @Nullable String getName();
 }

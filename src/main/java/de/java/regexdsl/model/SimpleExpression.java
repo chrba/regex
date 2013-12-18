@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 /**
  * A simple expression that does not contain any children. That means that
  * either this expression does not have any capturing groups or 
@@ -30,7 +32,7 @@ public abstract class SimpleExpression implements RegexExpression {
 	 * @return an empty list
 	 */
 	@Override
-	public List<RegexExpression> getChildren() {
+	public @Nonnull List<RegexExpression> getChildren() {
 		return Collections.emptyList();
 	}
 

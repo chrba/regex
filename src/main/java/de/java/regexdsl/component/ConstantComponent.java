@@ -2,6 +2,8 @@ package de.java.regexdsl.component;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.model.SimpleExpression;
 
 /**
@@ -13,12 +15,12 @@ import de.java.regexdsl.model.SimpleExpression;
 public class ConstantComponent extends SimpleExpression {
 
 	private final static String[] metaChars = {"?", "$", ".", "+", "^", "(", ")", "[", "]"};
-	private final String constant;
+	private final @Nonnull String constant;
 
 	/**
 	 * @param constant the constant expression, not null.
 	 */
-	public ConstantComponent(final String constant) {
+	public ConstantComponent(final @Nonnull String constant) {
 		checkNotNull(constant, "constant must not be null");
 		
 		String result = constant.replaceAll("\\\\", "\\\\\\\\");
@@ -31,7 +33,7 @@ public class ConstantComponent extends SimpleExpression {
 	}
 	
 	@Override
-	public String asRegex() {
+	public @Nonnull String asRegex() {
 		return constant;
 	}
 

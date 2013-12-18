@@ -1,5 +1,7 @@
 package de.java.regexdsl.component;
 
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.model.ComplexExpression;
 
 /**
@@ -17,7 +19,7 @@ public class RootComponent extends ComplexExpression{
 	}
 
 	@Override
-	public String asRegex() {
+	public @Nonnull String asRegex() {
 		return this.groups();
 	}
 	

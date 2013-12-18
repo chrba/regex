@@ -1,5 +1,7 @@
 package de.java.regexdsl.component;
 
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.model.SimpleExpression;
 
 /**
@@ -11,7 +13,7 @@ import de.java.regexdsl.model.SimpleExpression;
 public class NumberComponent extends SimpleExpression {
 
 	@Override
-	public String asRegex() {
+	public @Nonnull String asRegex() {
 		return "\\d+(\\.\\d+)?";
 	}
 

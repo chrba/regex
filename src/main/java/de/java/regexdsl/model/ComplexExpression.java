@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * An expression which consists of child expressions. 
  * 
  * @author Christian Bannes
  */
 public abstract class ComplexExpression implements RegexExpression {
-	private final List<RegexExpression> children = new ArrayList<RegexExpression>();
+	private final @Nonnull List<RegexExpression> children = new ArrayList<RegexExpression>();
 	private final String name;
 	
 	/**
@@ -50,7 +52,8 @@ public abstract class ComplexExpression implements RegexExpression {
 	}
 
 	@Override
-	public List<RegexExpression> getChildren() {
+	@SuppressWarnings("null")
+	public @Nonnull List<RegexExpression> getChildren() {
 		return Collections.unmodifiableList(this.children);
 	}
 

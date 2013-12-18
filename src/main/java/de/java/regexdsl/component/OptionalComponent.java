@@ -2,6 +2,9 @@ package de.java.regexdsl.component;
 
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.model.ComplexExpression;
 
 /**
@@ -22,7 +25,7 @@ public class OptionalComponent extends ComplexExpression {
 	}
 	
 	@Override
-	public String asRegex() {
+	public @Nonnull String asRegex() {
 		final String groups = this.groups();
 		return "(" + groups + ")?"; 
 	}

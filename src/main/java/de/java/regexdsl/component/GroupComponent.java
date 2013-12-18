@@ -2,6 +2,8 @@ package de.java.regexdsl.component;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.model.ComplexExpression;
 import de.java.regexdsl.model.RegexExpression;
 
@@ -34,7 +36,7 @@ public class GroupComponent extends ComplexExpression {
 	
 
 	@Override
-	public String asRegex() {
+	public @Nonnull String asRegex() {
 		final String groups = this.groups();
 		return "(" + groups + ")";
 	}

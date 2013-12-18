@@ -2,6 +2,9 @@ package de.java.regexdsl.component;
 
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import javax.annotation.Nonnull;
+
 import de.java.regexdsl.model.SimpleExpression;
 
 /**
@@ -21,7 +24,7 @@ public class PatternComponent extends SimpleExpression{
 	}
 
 	@Override
-	public String asRegex() {
+	public @Nonnull String asRegex() {
 		return this.pattern;
 	}
 }

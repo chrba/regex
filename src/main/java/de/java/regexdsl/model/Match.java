@@ -54,5 +54,15 @@ public class Match {
 			return null;
 		}
 	}
+
+	/**
+	 * Attempts to match the entire region against the pattern.
+	 * Returns true, if the match succeeds, else false.
+	 * 
+	 * @return true, if the match succeeds, else false
+	 */
+	public boolean empty() {
+		return !this.matcher.matches();
+	}
 	
 }

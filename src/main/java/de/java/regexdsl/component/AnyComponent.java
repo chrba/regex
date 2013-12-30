@@ -10,7 +10,6 @@ import de.java.regexdsl.model.SimpleExpression;
  * @author Christian Bannes
  */
 public class AnyComponent extends SimpleExpression {
-	final Integer test =0;
 	
 	@Override
 	public @Nonnull String asRegex() {

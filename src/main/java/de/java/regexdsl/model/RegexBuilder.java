@@ -142,6 +142,18 @@ public class RegexBuilder {
 	}	
 	
 	/**
+	 * Used to provide a regex that was created previously using this builder without
+	 * naming the regex
+	 * 
+	 * @param name the name to access the regex match
+	 * @param regex the regex
+	 * @return the builder
+	 */
+	public RegexBuilder regex(final Regex regex) {
+		return addComponent(regex.getExpression());
+	}
+	
+	/**
 	 * Matches any number including floats, e.g. 12345 or 0.1234. 
 	 * 
 	 * @param name the name to access the match 
